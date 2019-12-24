@@ -1,4 +1,4 @@
-"""backend_ch3_sec1 URL Configuration
+"""backend URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.1/topics/http/urls/
@@ -18,6 +18,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('weather/', include('apis.urls'))
+    # 匹配api的1.0版本的路由信息
+    path('api/v1.0', include('backend.version_1_0')),
 ]
 

@@ -6,5 +6,6 @@ from .views import weather
 __author__ = "bbw"
 
 urlpatterns = [
-    path('', weather.weather),
+    # 在应用中将url路由到具体的视图中
+    path('weather', weather.weather)
 ]
