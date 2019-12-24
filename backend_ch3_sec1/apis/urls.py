@@ -6,5 +6,5 @@ from .views import weather
 __author__ = "bbw"
 
 urlpatterns = [
-    path('', weather.helloworld)
+    path('', weather.weather),
 ]
