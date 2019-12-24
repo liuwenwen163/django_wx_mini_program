@@ -6,6 +6,7 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
+yaml = {index = "https://pypi.tuna.tsinghua.edu.cn/simple/",version = "*"}
 
 [requires]
 python_version = "3.6"
