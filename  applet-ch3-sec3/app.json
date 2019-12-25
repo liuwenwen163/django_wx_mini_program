@@ -1,8 +1,9 @@
 {
   "pages": [
-    "pages/index/index",
     "pages/logs/logs",
-    "pages/menu/menu"
+    "pages/index/index",
+    "pages/menu/menu",
+    "pages/backup/backup"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -11,25 +12,31 @@
     "navigationBarTextStyle": "black"
   },
   "tabBar": {
-    "list": [{
-      "pagePath": "pages/index/index",
-      "text": "首页",
-      "iconPath": "",
-      "selectedIconPath": ""
-    },
-    {
-      "pagePath": "pages/logs/logs",
-      "text": "日志",
-      "iconPath": "",
-      "selectedIconPath": ""
-    },
-    {
-      "pagePath": "pages/menu/menu",
-      "text": "应用",
-      "iconPath": "",
-      "selectedIconPath": ""
-    }]
-  },
-  "style": "v2",
-  "sitemapLocation": "sitemap.json"
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "",
+        "selectedIconPath": ""
+      },
+      {
+        "pagePath": "pages/logs/logs",
+        "text": "日志",
+        "iconPath": "",
+        "selectedIconPath": ""
+      },
+      {
+        "pagePath": "pages/menu/menu",
+        "text": "应用",
+        "iconPath": "",
+        "selectedIconPath": ""
+      },
+      {
+        "pagePath": "pages/backup/backup",
+        "text": "图片备份",
+        "iconPath": "",
+        "selectedIconPath": ""
+      }
+    ]
+  }
 }

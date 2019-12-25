@@ -1,6 +1,5 @@
 // pages/menu/menu.js
 
-// 获取全局唯一的小程序对象
 const app = getApp()
 
 Page({
@@ -17,22 +16,20 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面加载，
-   * 当页面加载时，调用updateMenu函数页面
+   * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
     this.updateMenuData()
   },
 
   /**
-   * 请求后台，更新menu的数据
+   * 请求后台，更新menu数据
    */
   updateMenuData: function () {
     var that = this
     wx.request({
       url: app.globalData.serverUrl + app.globalData.apiVersion + '/service/menu',
-      success: function(res){
-        // 第一个data代表data字段，第二个data代表data值
+      success: function (res) {
         var menuData = res.data.data
         that.setData({
           grids: menuData
