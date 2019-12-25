@@ -1,6 +1,7 @@
 # encoding: utf-8
 import os
 from django.http import Http404, HttpResponse, FileResponse, JsonResponse
+from django.views import View
 
 from backend import settings
 import utils.response
@@ -8,22 +9,36 @@ import utils.response
 __author__ = "bbw"
 
 
-def image(request):
-    """获取并返回图片的"""
-    if request.method == 'GET':
+class ImageView(View, utils.response.CommonResponseMixin):
+    """
+    utils.response.CommonResponseMixin是Mixin多继承
+    通过Mixin可以直接使用self来调用额外扩展的方法wrap_json_response
+    """
+    def get(self, request):
         # MD5是作为url的参数传入进来的
         md5 = request.GET.get('md5')
         imgfile = os.path.join(settings.IMAGES_DIR, md5 + '.jpg')
         if not os.path.exists(imgfile):
             return Http404()
         else:
-            """方法一：使用HttpResponse
-            #这里获取的data是二进制流，直接返回客户端会乱码
-            # data = open(imgfile, 'rb').read()  # imgfile是文件路径
-            # 告诉客户端data的类型是图片
-            # return HttpResponse(content=data, content_type='image/jpg')"""
-            #  方法二：使用FileResponse一步到位
+            #  使用FileResponse一步到位,直接渲染的是文件
             return FileResponse(open(imgfile, 'rb'), content_type='image/jpg')
+
+    def post(self, request):
+        message = 'post method success.'
+        # 通过使用Mixin，可以直接调用通过Mixin定义的函数了
+        response = self.wrap_json_response(message=message)
+        return JsonResponse(data=response, safe=False)
+
+    def put(self, request):
+        message = 'put method success.'
+        response = self.wrap_json_response(message=message)
+        return JsonResponse(data=response, safe=False)
+
+    def delete(self, request):
+        message = 'delete method success.'
+        response = self.wrap_json_response(message=message)
+        return JsonResponse(data=response, safe=False)
 
 
 def image_text(request):

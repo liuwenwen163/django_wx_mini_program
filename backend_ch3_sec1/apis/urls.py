@@ -9,6 +9,6 @@ urlpatterns = [
     # 在应用中将url路由到具体的视图中
     path('weather', weather.weather),
     path('menu', menu.get_menu),
-    path('image', image.image),
+    path('image', image.ImageView.as_view()),
     path('imagetext', image.image_text)
 ]
