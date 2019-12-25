@@ -2,31 +2,32 @@
 import json
 
 from django.http import HttpResponse, JsonResponse, FileResponse
+from django.views import View
 
 from thirdparty import juhe
+from utils.response import CommonResponseMixin
 
 __author__ = "bbw"
 
 
-def weather(request):
-    if request.method == "GET":
-        city = request.GET.get('city')
-        data = juhe.weather(city)
+class WeatherView(View, CommonResponseMixin):
+    def get(self, request):
+        pass
 
-        return JsonResponse(data=data, status=200)
-    elif request.method == 'POST':
-        # 获取请求body中的城市信息
-        received_body = request.body
-        # 使用json进行数据解码
-        received_body = json.loads(received_body)
-        cities = received_body.get('cities')
-
-        response_data = []
+    def post(self, request):
+        """使用post来响应天气查询，在body中填写城市信息更加容易"""
+        data = []
+        received_body = request.body.decode('utf-8')  # 获取body中的数据
+        received_body = json.loads(received_body)  # 使用json标准库加载数据
+        cities = received_body.get('cities')  # 获取post过来的信息data数据
         for city in cities:
-            result = juhe.weather(city)
-            result['city'] = city
-            response_data.append(result)
-        return JsonResponse(data=response_data, safe=False, status=200)
+            result = juhe.weather(city.get('city'))
+            result['city_info'] = city
+            data.append(result)
+        data = self.wrap_json_response(data=data)  # 从Mixin继承来的方法
+        return JsonResponse(data=data, safe=False)
+
+
 
 
 

@@ -3,7 +3,8 @@
     "pages/logs/logs",
     "pages/index/index",
     "pages/menu/menu",
-    "pages/backup/backup"
+    "pages/backup/backup",
+    "pages/weather/weather"
   ],
   "window": {
     "backgroundTextStyle": "light",
