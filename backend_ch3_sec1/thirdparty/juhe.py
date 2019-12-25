@@ -11,7 +11,7 @@ def weather(cityname):
     :param cityname: 城市名字
     :return: 返回实况天气
     """
-    key = '9a3e1fa6cb79d69f1594af5cb219a469'
+    key = '7036a6c0ecd2a4dc39fe08779f4b0b20'
     api = 'http://v.juhe.cn/weather/index'
     params = 'cityname=%s&key=%s' % (cityname, key)
     url = api + '?' + params

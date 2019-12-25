@@ -5,6 +5,7 @@ __author__ = "bbw"
 
 # 状态码
 class ReturnCode:
+    # 这里的状态码的值是和前台共同协商确定的
     SUCCESS = 0
     FAILED = -100
     UNAUTHORIZED = -500
