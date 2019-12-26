@@ -14,6 +14,7 @@ __author__ = "bbw"
 
 
 def init_app_data():
+    """该函数是用来初始化注册应用的"""
     data_file = os.path.join(settings.BASE_DIR, 'app.yaml')
     with open(data_file, 'r', encoding='utf-8') as f:
         # yaml是用来配置项目应用的，当项目应用做成了可拓展的形式，就可以用app.yaml进行拓展
@@ -31,4 +32,5 @@ class GetMenu(View, CommonResponseMixin):
             data=published_app_data,
             code=ReturnCode.SUCCESS
         )
+        # 这里返回的数据就是前端menu显示的菜单
         return JsonResponse(data=response, safe=False,)

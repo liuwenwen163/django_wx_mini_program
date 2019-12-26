@@ -67,6 +67,21 @@ class ImageView(View, CommonResponseMixin):
         return JsonResponse(data=response, safe=False)
 
 
+class ImageListView(View, CommonResponseMixin):
+    def get(self, request):
+        image_files = os.listdir(settings.IMAGES_DIR)
+        response_data = []
+        for image_file in image_files:
+            response_data.append(
+                {
+                    "name": image_file,
+                    "md5": image_file[:-4]  # 去掉后四位是后缀名
+                }
+            )
+        response_data = self.wrap_json_response(data=response_data)
+        return JsonResponse(data=response_data)
+
+
 # def image_text(request):
 #     """获取图片，并添加上附加信息，作为Json数据返回给客户端"""
 #     if request.method == 'GET':

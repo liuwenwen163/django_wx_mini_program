@@ -6,7 +6,13 @@ published:
       publish_date: 2019-12-24
       url: /service/weather
       desc: this is a weater app.
-
+  - app:
+      category: life
+      application: backup-image
+      name: 图片备份
+      publish_date: 2019-12-24
+      url: /service/image
+      desc: this is a image backup app.
 
 #developing:
 #  - app:

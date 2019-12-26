@@ -27,18 +27,15 @@
       </view>
     </view>
     <view class="page__bd page__bd_spacing button-sp-area">
-      <button class="weui-btn" type="primary" bindtap='uploadFiles'>确认上传</button>
-      <button class="weui-btn" type="primary" bindtap='downloadFile'>下载图片</button>
-      <button class="weui-btn" type="primary" bindtap='deleteBackup'>删除图片</button>
+      <button class="weui-btn mini-btn" type="primary" bindtap='uploadFiles'>确认上传</button>
     </view>
-
-
 
     <!-- 已上传图片 -->
     <view class="weui-cells">
       <view class="text-center">已备份图片</view>
       <view class="weui-cell" wx:for="{{downloadedBackupedFiles}}">
-        <image class="" src="{{item}}" mode="aspectFill" data-index="{{index}}" data-type="DownloadedView" bindlongtap="longTapConfirm" />
+        <!-- 绑定了长按的事件 -->
+        <image class="" src="{{item.path}}" mode="aspectFill" data-index="{{index}}" data-type="DownloadedView" bindlongtap="longTapConfirm" />
       </view>
     </view>
     <view class='text-center' wx:if="{{downloadedBackupedFiles.length == 0}}">暂无</view>

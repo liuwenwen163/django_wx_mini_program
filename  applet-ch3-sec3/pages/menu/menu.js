@@ -39,12 +39,19 @@ Page({
     })
   },
 
-  onNavigatorTap: function(e){
+  onNavigatorTap: function (e) {
     var index = e.currentTarget.dataset.index
-    var appItem = this.data.grids[index]
-    if (appItem.app.application == 'weather'){
+    var item = this.data.grids[index]
+    console.log(item)
+    if (item.app.application == 'weather') {
+      console.log('-------------')
       wx.navigateTo({
         url: '../weather/weather',
+      })
+    } else if (item.app.application == 'backup-image') {
+      console.log('+++++++++++++')
+      wx.navigateTo({
+        url: '../backup/backup',
       })
     }
   }

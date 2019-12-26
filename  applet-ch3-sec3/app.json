@@ -1,6 +1,5 @@
 {
   "pages": [
-    "pages/logs/logs",
     "pages/index/index",
     "pages/menu/menu",
     "pages/backup/backup",
@@ -21,20 +20,8 @@
         "selectedIconPath": ""
       },
       {
-        "pagePath": "pages/logs/logs",
-        "text": "日志",
-        "iconPath": "",
-        "selectedIconPath": ""
-      },
-      {
         "pagePath": "pages/menu/menu",
         "text": "应用",
-        "iconPath": "",
-        "selectedIconPath": ""
-      },
-      {
-        "pagePath": "pages/backup/backup",
-        "text": "图片备份",
         "iconPath": "",
         "selectedIconPath": ""
       }
