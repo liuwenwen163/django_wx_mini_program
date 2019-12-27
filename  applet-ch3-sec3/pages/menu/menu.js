@@ -44,14 +44,29 @@ Page({
     var item = this.data.grids[index]
     console.log(item)
     if (item.app.application == 'weather') {
-      console.log('-------------')
+      console.log('weather')
       wx.navigateTo({
         url: '../weather/weather',
       })
     } else if (item.app.application == 'backup-image') {
-      console.log('+++++++++++++')
+      console.log('backup-image')
       wx.navigateTo({
         url: '../backup/backup',
+      })
+    } else if (item.app.application == 'stock') {
+      console.log('stock')
+      wx.navigateTo({
+        url: '../stock/stock',
+      })
+    } else if (item.app.application == 'constellation') {
+      console.log('constellation')
+      wx.navigateTo({
+        url: '../service/service?type=constellation',
+      })
+    } else if (item.app.application == 'joke') {
+      console.log('joke')
+      wx.navigateTo({
+        url: '../service/service?type=joke',
       })
     }
   }

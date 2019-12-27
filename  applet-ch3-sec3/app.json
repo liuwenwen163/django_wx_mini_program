@@ -3,7 +3,9 @@
     "pages/index/index",
     "pages/menu/menu",
     "pages/backup/backup",
-    "pages/weather/weather"
+    "pages/weather/weather",
+    "pages/stock/stock",
+    "pages/service/service"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -26,5 +28,6 @@
         "selectedIconPath": ""
       }
     ]
-  }
+  },
+  "sitemapLocation": "sitemap84.json"
 }

@@ -13,6 +13,27 @@ published:
       publish_date: 2019-12-24
       url: /service/image
       desc: this is a image backup app.
+  - app:
+      category: life
+      application: stock
+      name: 股票
+      publish_date: 2019-12-26
+      url: /service/stock
+      desc: this is a stock app.
+  - app:
+      category: life
+      application: constellation
+      name: 星座运势
+      publish_date: 2019-12-26
+      url: /service/constellation
+      desc: this is a constellation app.
+  - app:
+      category: life
+      application: joke
+      name: 笑话
+      publish_date: 2019-12-26
+      url: /service/joke
+      desc: this is a joke app.
 
 #developing:
 #  - app:

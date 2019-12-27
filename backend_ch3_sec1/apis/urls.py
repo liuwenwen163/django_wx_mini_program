@@ -5,6 +5,7 @@ from .views import menu
 from .views.weather import WeatherView
 from .views.image import ImageView, ImageListView
 from .views.menu import GetMenu
+from .views.service import stock, constellation, joke
 
 __author__ = "bbw"
 
@@ -13,5 +14,8 @@ urlpatterns = [
     path('weather', WeatherView.as_view()),
     path('menu', GetMenu.as_view()),
     path('image', ImageView.as_view()),
-    path('image/list', ImageListView.as_view())
+    path('image/list', ImageListView.as_view()),
+    path('stock', stock),
+    path('constellation', constellation),
+    path('joke', joke)
 ]

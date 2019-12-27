@@ -122,3 +122,5 @@ STATIC_URL = '/static/'
 
 RESOURCES_DIR = os.path.join(BASE_DIR, 'resources')
 IMAGES_DIR = os.path.join(RESOURCES_DIR, 'images')
+
+USE_PROXY = False
