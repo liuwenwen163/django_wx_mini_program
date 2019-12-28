@@ -7,6 +7,8 @@ verify_ssl = true
 
 [packages]
 yaml = {index = "https://pypi.tuna.tsinghua.edu.cn/simple/",version = "*"}
+crypto = "*"
+pycryptosat = {path = "./pycryptosat-0.6.1-cp36-cp36m-win32.whl"}
 
 [requires]
 python_version = "3.6"

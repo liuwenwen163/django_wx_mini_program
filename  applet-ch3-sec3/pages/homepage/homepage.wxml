@@ -1,0 +1,7 @@
+<!--pages/homepage/homepage.wxml-->
+<view class="container">
+  <view class="page__bd page__bd_spacing button-sp-area">
+    <button class="weui-btn mini-btn" type="primary" bindtap='onReadCookies'>获取Cookies演示</button>
+    <button class="weui-btn mini-btn" type="primary" bindtap='authorize'>授权登录</button>
+  </view>
+</view>

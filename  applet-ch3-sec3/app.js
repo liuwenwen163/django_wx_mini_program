@@ -38,6 +38,7 @@ App({
   globalData: {
     // 定义api的地址以及版本
     userInfo: null,
+    appId: 'wx37dd40bed100c757',
     serverUrl: 'http://127.0.0.1:8001',
     apiVersion: '/api/v1.0'
   }

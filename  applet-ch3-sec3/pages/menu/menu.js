@@ -28,6 +28,7 @@ Page({
   updateMenuData: function () {
     var that = this
     wx.request({
+      // 九宫格的数据是请求后台获得的
       url: app.globalData.serverUrl + app.globalData.apiVersion + '/service/menu',
       success: function (res) {        
         var menuData = res.data.data

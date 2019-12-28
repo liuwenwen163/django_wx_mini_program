@@ -5,7 +5,8 @@
     "pages/backup/backup",
     "pages/weather/weather",
     "pages/stock/stock",
-    "pages/service/service"
+    "pages/service/service",
+    "pages/homepage/homepage"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -24,6 +25,12 @@
       {
         "pagePath": "pages/menu/menu",
         "text": "应用",
+        "iconPath": "",
+        "selectedIconPath": ""
+      },
+      {
+        "pagePath": "pages/homepage/homepage",
+        "text": "个人",
         "iconPath": "",
         "selectedIconPath": ""
       }
