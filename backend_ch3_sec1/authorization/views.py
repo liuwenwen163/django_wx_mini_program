@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from django.views import View
 
 from authorization.models import User
-from utils.auth import c2s
+from utils.auth import c2s, already_authorized
 from utils.response import CommonResponseMixin, ReturnCode
 
 __author__ = "bbw"
@@ -28,11 +28,57 @@ class Test_Session2(View, CommonResponseMixin):
 
 
 class UserView(View, CommonResponseMixin):
+    """关注的城市、股票和星座"""
     def get(self, request):
-        pass
+        """获取用户的数据"""
+        if not already_authorized(request):
+            # 用户如果未登录，直接返回
+            response = self.wrap_json_response(code=ReturnCode.UNAUTHORIZED)
+            return JsonResponse(response, safe=False)
+
+        open_id = request.session.get('open_id')  # 如果用户已登录，就可以获取其openid
+        user = User.objects.get(open_id=open_id)  # 根据open_id查找出用户
+        data = {}
+        data['open_id'] = user.open_id
+        data['focus'] = {}
+        data['focus']['city'] = json.loads(user.focus_cities)  # json字符串需要用json.loads取出数据
+        data['focus']['stock'] = json.loads(user.focus_stocks)
+        data['focus']['constellation'] = json.loads(user.focus_constellations)
+        print('data:', data)
+
+        # 返回用户查询的城市，星座，股票信息
+        response = self.wrap_json_response(data=data, code=ReturnCode.SUCCESS)
+        return JsonResponse(response, safe=False)
 
     def post(self, request):
-        pass
+        """修改用户的数据"""
+        # 获取用户
+        if not already_authorized(request):
+            response = self.wrap_json_response(code=ReturnCode.UNAUTHORIZED)
+            return JsonResponse(response, safe=False)
+        open_id = request.session.get('open_id')
+        user = User.objects.get(open_id=open_id )
+
+        # 将取出的json字符串类型数据保存为字典
+        received_body = request.body.decode('utf-8')
+        received_body = eval(received_body)
+
+        # 获取数据，
+        cities = received_body.get('city')
+        stocks = received_body.get('stock')
+        constellations = received_body.get('constellation')
+        if cities == None: cities = []
+        if stocks == None: stocks = []
+        if constellations == None: constellations = []
+
+        # 修改数据，保存数据也要保存成json字符串
+        user.focus_cities = json.dumps(cities)
+        user.focus_stocks = json.dumps(stocks)
+        user.focus_constellations = json.dumps(constellations)
+        user.save()
+
+        response = self.wrap_json_response(code=ReturnCode.SUCCESS, message='修改用户信息成功.')
+        return JsonResponse(response, safe=False)
 
 
 def __authorize_by_code(request):

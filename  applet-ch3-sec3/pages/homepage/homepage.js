@@ -4,13 +4,7 @@ const app = getApp()
 const cookieUtil = require('../../utils/cookie.js')
 
 Page({
-
-  /**
-   * 页面的初始数据
-   */
-  data: {
-
-  },
+  data: {},
 
   onReadCookies: function () {
     wx.request({
@@ -18,49 +12,70 @@ Page({
       success(res) {
         var cookie = cookieUtil.getSessionIDFromResponse(res)
         console.log(cookie)
-        cookieUtil.setCookieToStorage(cookie)
-
-
-        // 将cookie存储到storage中
-        var newCookie = cookieUtil.getCookieFromStorage()  // 从storage中取出cookie
-        var header = {}
-        header.Cookie = newCookie
-        wx.request({
-          url: app.globalData.serverUrl + app.globalData.apiVersion + '/auth/test2',
-          header: header,  // 将有cookie的头传入
-          success: function (res) {
-
-          }
-        })
       }
     }
     )
   },
 
+  // navigator跳转处理
+  onNavigatorTap: function (event) {
+    var cookie = cookieUtil.getCookieFromStorage()
+    if (cookie.length == 0) {
+      // 根据cookie长度判断用户是否授权
+      wx.showToast({
+        title: '尚未授权',
+        icon: 'none'
+      })
+      return
+    }
+
+    // 获取由 data-type 标签传递过来的参数
+    console.log(event.currentTarget.dataset.type)
+    var navigatorType = event.currentTarget.dataset.type
+
+    if (navigatorType == 'focusCity') {
+      navigatorType = 'city'
+    } else if (navigatorType == 'focusStock') {
+      navigatorType = 'stock'
+    } else {
+      navigatorType = 'constellation'
+    }
+    var url = '../picker/picker?type=' + navigatorType
+    wx.navigateTo({
+      // 保留当前页面，跳转到应用内的某个页面
+      url: '../picker/picker?type=' + navigatorType,
+    })
+  },
+
   authorize: function () {
-    wx.login({  // 调用wx.login()
+    console.log('authorize')
+    var that = this
+    // 登陆并获取cookie
+    wx.login({
       success: function (res) {
-        var code = res.code  // 获取临时的code
+        console.log(res)
+        var code = res.code
         var appId = app.globalData.appId
         var nickname = app.globalData.userInfo.nickName
+        // 请求后台
         wx.request({
           url: app.globalData.serverUrl + app.globalData.apiVersion + '/auth/authorize',
           method: 'POST',
-          data: {  // 将要验证的数据发送到后台
+          data: {
             code: code,
             appId: appId,
             nickname: nickname
           },
           header: {
-            'content-type': 'application/json'
+            'content-type': 'application/json' // 默认值
           },
-          success: function (res) {
+          success(res) {
             wx.showToast({
-              title: '授权成功'
+              title: '授权成功',
             })
+            // 保存cookie
             var cookie = cookieUtil.getSessionIDFromResponse(res)
             cookieUtil.setCookieToStorage(cookie)
-            console.log(cookie)
           }
         })
       }

@@ -6,7 +6,8 @@
     "pages/weather/weather",
     "pages/stock/stock",
     "pages/service/service",
-    "pages/homepage/homepage"
+    "pages/homepage/homepage",
+    "pages/picker/picker"
   ],
   "window": {
     "backgroundTextStyle": "light",
