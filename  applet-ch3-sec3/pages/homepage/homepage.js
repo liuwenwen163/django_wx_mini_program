@@ -4,7 +4,11 @@ const app = getApp()
 const cookieUtil = require('../../utils/cookie.js')
 
 Page({
-  data: {},
+  data: {
+    isLogin: null,
+    userInfo: null,
+    hasUserInfo: null
+  },
 
   onReadCookies: function () {
     wx.request({
@@ -19,31 +23,50 @@ Page({
 
   // navigator跳转处理
   onNavigatorTap: function (event) {
+    var that = this
     var cookie = cookieUtil.getCookieFromStorage()
-    if (cookie.length == 0) {
-      // 根据cookie长度判断用户是否授权
-      wx.showToast({
-        title: '尚未授权',
-        icon: 'none'
-      })
-      return
-    }
+    var header = {}
+    header.Cookie = cookie
 
-    // 获取由 data-type 标签传递过来的参数
-    console.log(event.currentTarget.dataset.type)
-    var navigatorType = event.currentTarget.dataset.type
+    wx.request({
+      url: app.globalData.serverUrl + app.globalData.apiVersion + '/auth/status',
+      header: header,
+      success: function(res) {
+        var data = res.data.data
+        console.log(data)
+        if (data.is_authorized == 1){
+          that.setData({
+            isLogin: true
+          })
+        } else {
+          that.setData({
+            isLogin: false
+          })
+          wx.showToast({
+            title: '请先授权登录',
+          })
+        }
 
-    if (navigatorType == 'focusCity') {
-      navigatorType = 'city'
-    } else if (navigatorType == 'focusStock') {
-      navigatorType = 'stock'
-    } else {
-      navigatorType = 'constellation'
-    }
-    var url = '../picker/picker?type=' + navigatorType
-    wx.navigateTo({
-      // 保留当前页面，跳转到应用内的某个页面
-      url: '../picker/picker?type=' + navigatorType,
+        if (data.is_authorized == 1){
+          // 配置全局状态
+          app.setAuthStatus(true)
+          // 获取由 data-type 标签传递过来的参数
+          console.log(event.currentTarget.dataset.type)
+          var navigatorType = event.currentTarget.dataset.type
+          if (navigatorType == 'focusCity') {
+            navigatorType = 'city'
+          } else if (navigatorType == 'focusStock') {
+            navigatorType = 'stock'
+          } else {
+            navigatorType = 'constellation'
+          }
+          var url = '../picker/picker?type=' + navigatorType
+          console.log('navigateTo url: ' + url)
+          wx.navigateTo({
+            url: '../picker/picker?type=' + navigatorType,
+          })
+        }
+      }
     })
   },
 
@@ -76,8 +99,57 @@ Page({
             // 保存cookie
             var cookie = cookieUtil.getSessionIDFromResponse(res)
             cookieUtil.setCookieToStorage(cookie)
+            that.setData({
+              isLogin: true,
+              userInfo: app.globalData.userInfo,
+              hasUserInfo: true
+            })
+            app.setAuthStatus(true)
           }
         })
+      }
+    })
+  },
+
+  logout: function () {
+    var that = this
+    var cookie = cookieUtil.getCookieFromStorage()
+    var header = {}
+    header.Cookie = cookie
+    wx.request({
+      // 去后端删除session
+      url: app.globalData.serverUrl + app.globalData.apiVersion + '/auth/logout',
+      method: 'GET',
+      header: header,
+      success: function (res) {
+        that.setData({
+          // 配置本地的数据
+          isLogin: false,
+          userInfo: null,
+          hasUserInfo: false
+        })
+        // 清空cookies和改变去安居用户状态
+        cookieUtil.setCookieToStorage('')
+        app.setAuthStatus(false)
+      }
+    })
+  },
+
+  getStatusFromRemote: function () {
+    var that = this
+    var cookie = cookieUtil.getCookieFromStorage()
+    var header = {}
+    header.Cookie = cookie
+    wx.request({
+      url: app.globalData.serverUrl + app.globalData.apiVersion + '/auth/status',
+      method: 'GET',
+      header: header,
+      success: function (res) {
+        if (res.data.data.is_authorized == 1) {
+          console.log('登录状态')
+        } else {
+          console.log('Session过期，未登录状态')
+        }
       }
     })
   }

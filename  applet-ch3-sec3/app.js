@@ -33,13 +33,27 @@ App({
       }
     })
   },
-  onShow: function () { },
-  onHide: function () { },
+  getAuthStatus: function() {
+    // 返回当前用户的登录状态
+    return this.globalData.auth.isAuthorized
+  },
+  setAuthStatus: function(status){
+    // 修改用户当前的登录状态
+    console.log('set auth status:' + status)
+    if (status == true || status == false) {
+      this.globalData.auth.isAuthorized = status
+    } else {
+      console.log('invalid status')
+    }
+  },
   globalData: {
     // 定义api的地址以及版本
     userInfo: null,
     appId: 'wx37dd40bed100c757',
     serverUrl: 'http://127.0.0.1:8001',
-    apiVersion: '/api/v1.0'
+    apiVersion: '/api/v1.0',
+    auth: {
+      isAuthorized: false
+    }
   }
 })

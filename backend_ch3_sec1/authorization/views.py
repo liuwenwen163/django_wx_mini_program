@@ -48,7 +48,7 @@ class UserView(View, CommonResponseMixin):
 
         # 返回用户查询的城市，星座，股票信息
         response = self.wrap_json_response(data=data, code=ReturnCode.SUCCESS)
-        return JsonResponse(response, safe=False)
+        return JsonResponse(data=response, safe=False)
 
     def post(self, request):
         """修改用户的数据"""
@@ -78,7 +78,7 @@ class UserView(View, CommonResponseMixin):
         user.save()
 
         response = self.wrap_json_response(code=ReturnCode.SUCCESS, message='修改用户信息成功.')
-        return JsonResponse(response, safe=False)
+        return JsonResponse(data=response, safe=False)
 
 
 def __authorize_by_code(request):
@@ -122,3 +122,23 @@ def __authorize_by_code(request):
 
 def authorize(request):
     return __authorize_by_code(request)
+
+
+def logout(request):
+    # 清理request对应的session，实现注销
+    request.session.clear()
+    response = CommonResponseMixin.wrap_json_response(code=ReturnCode.SUCCESS)
+    return JsonResponse(data=response, safe=False)
+
+
+def get_stuatus(request):
+    print('call get_status function...')
+    if already_authorized(request):
+        data = {'is_authorized': 1}
+    else:
+        data = {'is_authorized': 0}
+    response = CommonResponseMixin.wrap_json_response(
+        data=data, code=ReturnCode.SUCCESS
+    )
+    return JsonResponse(data=response, safe=False)
+

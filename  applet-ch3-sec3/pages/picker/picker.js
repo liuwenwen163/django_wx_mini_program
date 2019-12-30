@@ -84,8 +84,7 @@ Page({
       },
       header: header,
       success: function (res) {
-        // console.log(data)
-        // console.log(res)
+        console.log(res)
         wx.showModal({
           title: '保存成功',
           content: '',

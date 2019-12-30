@@ -1,5 +1,12 @@
 <!--pages/homepage/homepage.wxml-->
 <view class="container">
+  <view class="userinfo">
+    <text wx:if="{{!hasUserInfo}}"> 请先登录 </text>
+    <block wx:else>
+      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+    </block>
+  </view>
   <view class="weui-panel">
     <view class="weui-panel__bd">
       <view class="weui-media-box weui-media-box_small-appmsg">
@@ -37,5 +44,7 @@
   </view>
   <view class="page__bd page__bd_spacing button-sp-area">
     <button class="weui-btn mini-btn" type="primary" disabled="{{isLogin}}" bindtap='authorize'>授权登录</button>
+    <button class="weui-btn mini-btn" type="warn" disabled="{{! isLogin}}" bindtap='logout'>注销</button>
+    <button class="weui-btn mini-btn" type="warn" disabled="{{! isLogin}}" bindtap='getStatusFromRemote'>获取状态</button>
   </view>
 </view>

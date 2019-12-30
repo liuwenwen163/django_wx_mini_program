@@ -128,3 +128,6 @@ IMAGES_DIR = os.path.join(RESOURCES_DIR, 'images')
 
 USE_PROXY = False
 WX_APP_SECRET = secret_key
+
+# session过期时间,单位是秒
+SESSION_COOKIE_AGE = 60*1
