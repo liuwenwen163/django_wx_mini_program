@@ -77,6 +77,8 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
+"""
+# 原有的数据库数据，已经同步到slave中，可以以注释掉
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -91,18 +93,19 @@ DATABASES = {
         'PORT': '3306'
     }
 }
+"""
 
-# # 我们自己创建的数据库
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'django_backend_wx',
-#         'USER': 'root',
-#         'PASSWORD': '123456',
-#         'HOST': '127.0.0.1',
-#         'PORT': '3306'
-#     }
-# }
+# 我们自己创建的数据库
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'django_backend_wx',
+        'USER': 'root',
+        'PASSWORD': '123456',
+        'HOST': '127.0.0.1',
+        'PORT': '3306'
+    }
+}
 
 
 # Password validation

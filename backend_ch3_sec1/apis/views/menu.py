@@ -2,12 +2,16 @@
 """
     加载应用配置，并且返回前台
 """
+import json
 import os
 import yaml
 from django.http import JsonResponse
 from django.views import View
 
+from apis.models import App
+from authorization.models import User
 from backend import settings
+from utils.auth import already_authorized, get_user
 from utils.response import CommonResponseMixin, ReturnCode
 
 __author__ = "bbw"
@@ -24,13 +28,52 @@ def init_app_data():
 
 class GetMenu(View, CommonResponseMixin):
     def get(self, request):
-        # 获取到的是init_app返回的全部的应用信息
-        global_app_data = init_app_data()
-        published_app_data = global_app_data.get('published')  # 获取已经发布的应用信息
-        # 将数据返回之前，做一些额外的封装，加上状态码
-        response = self.wrap_json_response(
-            data=published_app_data,
-            code=ReturnCode.SUCCESS
-        )
-        # 这里返回的数据就是前端menu显示的菜单
-        return JsonResponse(data=response, safe=False,)
+        query_set = App.objects.all()
+        all_app = []
+        for app in query_set:
+            all_app.append(app.to_dict())
+        print(all_app)
+        response = self.wrap_json_response(data=all_app)
+        print(response)
+        return JsonResponse(data=response, safe=False)
+
+
+class UserMenu(View, CommonResponseMixin):
+    def get(self, request):
+        # 如果未登录，返回未鉴权
+        if not already_authorized(request):
+            response = self.wrap_json_response(code=ReturnCode.UNAUTHORIZED)
+            return JsonResponse(response, safe=False)
+        # 否则返回用户定制的menu
+        open_id = request.session.get('open_id')
+        user = User.objects.get(open_id=open_id)
+        # 利用了多对多关系，获取用户对应的全部应用列表
+        menu_list = user.menu.all()
+
+        user_menu = []
+        for app in menu_list:
+            user_menu.append(app.to_dict())
+        response = self.wrap_json_response(data=user_menu, code=ReturnCode.SUCCESS)
+        return JsonResponse(response, safe=False)
+
+    def post(self, request):
+        # 如果未登录，返回未鉴权
+        if not already_authorized(request):
+            response = self.wrap_json_response(code=ReturnCode.UNAUTHORIZED)
+            return JsonResponse(response, safe=False)
+        user = get_user(request)
+        post_menu = json.loads(request.body.decode('utf-8'))
+        post_menu = post_menu.get('data')
+        focus_menu = []
+        print(post_menu)
+        for item in post_menu:
+            print(item)
+            print(item.get('appid'))
+            item = App.objects.get(appid=item.get('appid'))
+            print(item)
+            focus_menu.append(item)
+        print(focus_menu)
+        user.menu.set(focus_menu)
+        user.save()
+        response = CommonResponseMixin.wrap_json_response(code=ReturnCode.SUCCESS)
+        return JsonResponse(response, safe=False)
