@@ -1,27 +1,96 @@
 //index.js
 //获取应用实例
 const app = getApp()
+const cookieUtil = require('../../utils/cookie.js')
 
 Page({
   data: {
-    motto: 'Hello World',
-    userInfo: {},
-    hasUserInfo: false,
-    canIUse: wx.canIUse('button.open-type.getUserInfo')
+    isAuthorized: false,
+    constellationData: null,
+    stockData: null,
+    weatherData: null
   },
   //事件处理函数
-  bindViewTap: function() {
+  bindViewTap: function () {
     wx.navigateTo({
       url: '../logs/logs'
     })
   },
+
+  updateData: function () {
+    wx.showLoading({
+      title: '加载中',
+    })
+    var that = this
+    var cookie = cookieUtil.getCookieFromStorage()
+    var header = {}
+    header.Cookie = cookie
+    wx.request({
+      url: app.globalData.serverUrl + app.globalData.apiVersion + '/service/weather',
+      header: header,
+      success: function (res) {
+        that.setData({
+          weatherData: res.data.data
+        })
+        wx.hideLoading()
+      }
+    })
+    wx.request({
+      url: app.globalData.serverUrl + app.globalData.apiVersion + '/service/constellation',
+      header: header,
+      success: function (res) {
+        that.setData({
+          constellationData: res.data.data
+        })
+        wx.hideLoading()
+      }
+    })
+    wx.request({
+      url: app.globalData.serverUrl + app.globalData.apiVersion + '/service/stock',
+      header: header,
+      success: function (res) {
+        that.setData({
+          stockData: res.data.data
+        })
+        wx.hideLoading()
+      }
+    })
+  },
+
+  onPullDownRefresh: function () {
+    var that = this
+    var cookie = cookieUtil.getCookieFromStorage()
+    var header = {}
+    header.Cookie = cookie
+    wx.request({
+      url: app.globalData.serverUrl + app.globalData.apiVersion + '/auth/status',
+      header: header,
+      success: function (res) {
+        var data = res.data.data
+        if (data.is_authorized == 1) {
+          that.setData({
+            isAuthorized: true
+          })
+          that.updateData()
+        } else {
+          that.setData({
+            isAuthorized: false
+          })
+          wx.showToast({
+            title: '请先授权登录',
+          })
+        }
+      }
+    })
+  },
+
   onLoad: function () {
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,
         hasUserInfo: true
       })
-    } else if (this.data.canIUse){
+    } else if (this.data.canIUse) {
       // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
       // 所以此处加入 callback 以防止这种情况
       app.userInfoReadyCallback = res => {
@@ -43,7 +112,7 @@ Page({
       })
     }
   },
-  getUserInfo: function(e) {
+  getUserInfo: function (e) {
     console.log(e)
     app.globalData.userInfo = e.detail.userInfo
     this.setData({

@@ -81,8 +81,28 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    },
+    'slave': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'django_backend_wx',
+        'USER': 'root',
+        'PASSWORD': '123456',
+        'HOST': '127.0.0.1',
+        'PORT': '3306'
     }
 }
+
+# # 我们自己创建的数据库
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'django_backend_wx',
+#         'USER': 'root',
+#         'PASSWORD': '123456',
+#         'HOST': '127.0.0.1',
+#         'PORT': '3306'
+#     }
+# }
 
 
 # Password validation
@@ -130,4 +150,4 @@ USE_PROXY = False
 WX_APP_SECRET = secret_key
 
 # session过期时间,单位是秒
-SESSION_COOKIE_AGE = 60*1
+SESSION_COOKIE_AGE = 6000

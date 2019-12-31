@@ -4,15 +4,30 @@ import json
 from django.http import HttpResponse, JsonResponse, FileResponse
 from django.views import View
 
+from authorization.models import User
 from thirdparty import juhe
-from utils.response import CommonResponseMixin
+from utils.response import CommonResponseMixin, ReturnCode
+from utils.auth import already_authorized
 
 __author__ = "bbw"
 
 
 class WeatherView(View, CommonResponseMixin):
     def get(self, request):
-        pass
+        """根据用户存储的信息查询"""
+        if not already_authorized(request):
+            response = self.wrap_json_response({}, code=ReturnCode.UNAUTHORIZED)
+        else:
+            data = []
+            open_id = request.session.get('open_id')
+            user = User.objects.filter(open_id=open_id)[0]
+            cities = json.loads(user.focus_cities)
+            for city in cities:
+                result = juhe.weather(city.get('city'))
+                result['city_info'] = city
+                data.append(result)
+            response = self.wrap_json_response(data=data, code=ReturnCode.SUCCESS)
+        return JsonResponse(data=response, safe=False)
 
     def post(self, request):
         """使用post来响应天气查询，在body中填写城市信息更加容易"""

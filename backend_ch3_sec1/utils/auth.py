@@ -22,6 +22,7 @@ def already_authorized(request):
 
 
 def get_user(request):
+    # 封装了查询session中的open_id，根据open_id查询对应的用户对象
     if not already_authorized(request):
         raise Exception('not authorized request')
     open_id = request.session.get('open_id')

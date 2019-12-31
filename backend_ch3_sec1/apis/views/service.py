@@ -7,12 +7,13 @@ from django.http import JsonResponse
 
 from backend import settings
 from thirdparty import juhe
+from utils.auth import already_authorized, get_user
 from utils.response import CommonResponseMixin, ReturnCode
 
 __author__ = "bbw"
 
 
-constellations = ['白羊座', '金牛座', '双子座', '巨蟹座', '狮子座','处女座', '天秤座', '天蝎座', '射手座', '摩羯座','水瓶座', '双鱼座']
+all_constellations = ['白羊座', '金牛座', '双子座', '巨蟹座', '狮子座','处女座', '天秤座', '天蝎座', '射手座', '摩羯座','水瓶座', '双鱼座']
 
 popular_stocks = [
     {
@@ -42,6 +43,13 @@ all_jokes = []
 
 def stock(request):
     data = []
+    stocks = []
+    # 如果登录就显示登录用户关注的股票，否则显示预定义的股票
+    if already_authorized(request):
+        user = get_user(request)
+        stocks = json.loads(user.focus_constellations)
+    else:
+        stocks = popular_stocks
     for stock in popular_stocks:
         result = juhe.stock(stock['market'], stock['code'])
         data.append(result)
@@ -49,8 +57,15 @@ def stock(request):
     return JsonResponse(data=response, safe=False)
 
 
+# 星座运势
 def constellation(request):
     data = []
+    # 用户已登录的话，就显示登录用户关注的星座运势，否则就返回所有星座的运势
+    if already_authorized(request):
+        user = get_user(request)  # get_user根据request中的session获取用户对象
+        constellations = json.loads(user.focus_constellations)
+    else:
+        constellations = all_constellations
     for c in constellations:
         result = juhe.constellation(c)
         data.append(result)
