@@ -154,3 +154,49 @@ WX_APP_SECRET = secret_key
 
 # session过期时间,单位是秒
 SESSION_COOKIE_AGE = 6000
+
+LOG_DIR = os.path.join(BASE_DIR, 'log')
+if not os.path.exists(LOG_DIR):
+    os.makedirs(LOG_DIR)
+
+LOGGING = {
+    'version': 1,
+    # 配置日志格式
+    'formatters': {
+        'standard': {
+            'format': '%(asctime)s [%(threadName)s: %(thread)d]'
+                      '%(pathname)s:%(funcName)s:%(lineno)d %(levelname)s - %(message)s'
+        }
+    },
+    'filters': {
+        'test':{ # 过滤器的名字
+            '()': 'ops.TestFilter',
+        }
+    },
+    'handlers': {
+        # 终端处理器
+        'console_handler': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'standard'
+        },
+        # 文件处理器,当文件到达一定大小，自动将一个文件切成两个文件
+        'file_handler': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOG_DIR, 'backend.log'), # 指定日志的路径和名字
+            'maxBytes': 1024*1024*1024,
+            'backupCount': 5,
+            'formatter': 'standard',
+            'encoding': 'utf-8'
+        }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console_handler', 'file_handler'],
+            'filters': ['test'],  # 对应上面filters过滤器的名字
+            'level': 'DEBUG'
+        }
+    }
+}
+
