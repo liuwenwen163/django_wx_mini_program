@@ -7,7 +7,8 @@
     "pages/stock/stock",
     "pages/service/service",
     "pages/homepage/homepage",
-    "pages/picker/picker"
+    "pages/picker/picker",
+    "pages/applist/applist"
   ],
   "window": {
     "backgroundTextStyle": "light",
