@@ -1,3 +1,16 @@
-yaml
-django == 2.1.2
-utils
+certifi
+chardet
+Django == 2.1.2
+idna
+Naked
+numpy
+pycryptodome
+pycryptosat
+PyMySQL
+pytz
+PyYAML
+requests
+setuptools
+shellescape
+urllib3
+wheel

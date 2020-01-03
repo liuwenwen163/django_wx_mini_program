@@ -2,16 +2,20 @@
 import json
 import os
 import random
+import logging
 
+from django.core.cache import cache
 from django.http import JsonResponse
 
 from backend import settings
 from thirdparty import juhe
+from utils import timeutil
 from utils.auth import already_authorized, get_user
 from utils.response import CommonResponseMixin, ReturnCode
 
 __author__ = "bbw"
 
+logger = logging.getLogger('django')
 
 all_constellations = ['白羊座', '金牛座', '双子座', '巨蟹座', '狮子座','处女座', '天秤座', '天蝎座', '射手座', '摩羯座','水瓶座', '双鱼座']
 
@@ -67,7 +71,13 @@ def constellation(request):
     else:
         constellations = all_constellations
     for c in constellations:
-        result = juhe.constellation(c)
+        result = cache.get(c)
+        if not result:
+            result = juhe.constellation(c)
+            timeout = timeutil.get_day_left_in_second()  # 计算当天剩余时间，秒为单位
+            cache.set(c, result, timeout)
+            logger.info("set cache. key=[%s], value=[%s], timeout=[%d]" %(c, result, timeout))
+
         data.append(result)
     response = CommonResponseMixin.wrap_json_response(data=data, code=ReturnCode.SUCCESS)
     return JsonResponse(data=response, safe=False)
