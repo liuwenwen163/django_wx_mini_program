@@ -40,9 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'apis',
-    'authorization'
+    'authorization',
     # 第三方应用
-    'django_crontab'
+    'django-crontab'
 ]
 
 MIDDLEWARE = [
