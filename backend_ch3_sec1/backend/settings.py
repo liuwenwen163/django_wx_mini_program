@@ -101,7 +101,7 @@ DATABASES = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'django_backend_wx',
+        'NAME': 'django_wx_backend',
         'USER': 'root',
         'PASSWORD': '123456',
         'HOST': '127.0.0.1',
