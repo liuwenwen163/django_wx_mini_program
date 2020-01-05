@@ -154,7 +154,7 @@ STATIC_URL = '/static/'
 RESOURCES_DIR = os.path.join(BASE_DIR, 'resources')
 IMAGES_DIR = os.path.join(RESOURCES_DIR, 'images')
 
-USE_PROXY = False
+USE_PROXY = True  # 允许使用代理，模拟请求错误
 WX_APP_SECRET = secret_key
 
 # session过期时间,单位是秒
@@ -245,3 +245,6 @@ EMAIL_FROM = MAIL_USERNAME  # 收件人看到的发件人
 
 # 统计字段的分割符
 STATISTICS_SPLIT_FLAG = '||'
+
+# HA 请求超时实践的配置
+HA_TIMEOUT = 1

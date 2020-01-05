@@ -3,13 +3,14 @@ import json
 import requests
 import time
 
+from thirdparty.weather import CommonWeatherResult
 from utils import proxy
 from .app_key import WEATHER_AppKey, CONSTELLATION_AppKey, STOCK_AppKey
 
 __author__ = "bbw"
 
 
-def weather(cityname):
+def weather(cityname, timeout=1):
     """
     :param cityname: 城市名字
     :return: 返回实况天气
@@ -19,17 +20,23 @@ def weather(cityname):
     params = 'cityname=%s&key=%s' % (cityname, key)
     url = api + '?' + params
     print(url)
-    response = requests.get(url=url)
-    json_data = json.loads(response.text)
-    print(json_data)
-    result = json_data.get('result')
+    # 如果请求在1秒内没有返回，那么聚合api可能就发生故障了
+    response = requests.get(url=url, proxies=proxy.proxy(), timeout=1)
+    data = json.loads(response.text)
+    print(data)
+    result = data.get('result')
     sk = result.get('sk')
-    response = dict()
-    response['temperature'] = sk.get('temp')
-    response['wind_direction'] = sk.get('wind_direction')
-    response['wind_strength'] = sk.get('wind_strength')
-    response['humidity'] = sk.get('humidity')  # 湿度
-    response['time'] = sk.get('time')
+    # CommonWeatherResult用来统一两个接口返回的结果
+    response = CommonWeatherResult()
+    # 温度
+    response.temperature = sk.get('temp')
+    # 风向
+    response.wind_direction = sk.get('wind_direction')
+    # 风强度
+    response.wind_strength = sk.get('wind_strength')
+    # 湿度
+    response.humidity = sk.get('humidity')
+    response.time = sk.get('time')
     return response
 
 
