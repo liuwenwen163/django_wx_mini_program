@@ -16,7 +16,7 @@ class StatisticsMiddleware:
         logger.info('Build StatisticsMiddleware.')
 
     def __call__(self, request):
-        tick = time.tme()
+        tick = time.time()
         response = self.get_response(request)
         path = request.path
         full_path = request.get_full_path()
