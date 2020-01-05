@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'apis',
     'authorization',
     # 第三方应用
-    # 'django_crontab'
+    'django_crontab'
 ]
 
 MIDDLEWARE = [
@@ -170,6 +170,9 @@ LOGGING = {
         'standard': {
             'format': '%(asctime)s [%(threadName)s: %(thread)d]'
                       '%(pathname)s:%(funcName)s:%(lineno)d %(levelname)s - %(message)s'
+        },
+        'simple': {
+            'format': '%(asctime)s %(message)s'
         }
     },
     'filters': {
@@ -189,9 +192,18 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(LOG_DIR, 'backend.log'), # 指定日志的路径和名字
+            'maxBytes': 1024*1024*1024, # 文件大小
+            'backupCount': 5,  # 备份份数
+            'formatter': 'standard',  # 使用哪种formatters日志格式
+            'encoding': 'utf-8'
+        },
+        'statistics_handler': {  # 统计使用的handler
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOG_DIR, 'statistics.log'), # 指定日志的路径和名字
             'maxBytes': 1024*1024*1024,
             'backupCount': 5,
-            'formatter': 'standard',
+            'formatter': 'simple',
             'encoding': 'utf-8'
         }
     },
@@ -199,6 +211,10 @@ LOGGING = {
         'django': {
             'handlers': ['console_handler', 'file_handler'],
             'filters': ['test'],  # 对应上面filters过滤器的名字
+            'level': 'DEBUG'
+        },
+        'statistics': {  # 日志实例
+            'handlers': ['statistics_handler'],
             'level': 'DEBUG'
         }
     }
@@ -213,7 +229,8 @@ CACHES = {
 
 # 配置crontab
 CRONJOBS = [
-    ('*/1 * * * *', 'cron.jobs.demo')
+    # ('*/1 * * * *', 'cron.jobs.demo'),
+    ('*/1 * * * *', 'cron.jobs.report_by_mail')
 ]
 
 # 配置邮件服务
@@ -224,3 +241,6 @@ EMAIL_HOST_USER = MAIL_USERNAME  # 发送邮件的邮箱
 EMAIL_HOST_PASSWORD = MAIL_PASSWORD  # 邮箱的授权码
 EMAIL_USE_TLS = True  # 开启TLS
 EMAIL_FROM = MAIL_USERNAME  # 收件人看到的发件人
+
+# 统计字段的分割符
+STATISTICS_SPLIT_FLAG = '||'
