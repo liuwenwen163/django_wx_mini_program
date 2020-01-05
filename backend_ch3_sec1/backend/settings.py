@@ -154,7 +154,7 @@ STATIC_URL = '/static/'
 RESOURCES_DIR = os.path.join(BASE_DIR, 'resources')
 IMAGES_DIR = os.path.join(RESOURCES_DIR, 'images')
 
-USE_PROXY = True  # 允许使用代理，模拟请求错误
+USE_PROXY = False  # 允许使用代理，模拟请求错误
 WX_APP_SECRET = secret_key
 
 # session过期时间,单位是秒
