@@ -7,13 +7,14 @@ __author__ = "bbw"
 from backend import settings
 
 logger = logging.getLogger('statistics')  # 获取日志实例
+logger2 = logging.getLogger('django')
 
 
 # 实现统计时间的中间件
 class StatisticsMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
-        logger.info('Build StatisticsMiddleware.')
+        logger2.info('Build StatisticsMiddleware.')
 
     def __call__(self, request):
         tick = time.time()
