@@ -12,8 +12,9 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 
+from thirdparty.app_key import secret_key, MAIL_USERNAME, MAIL_PASSWORD
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-from thirdparty.app_key import secret_key
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -215,3 +216,11 @@ CRONJOBS = [
     ('*/1 * * * *', 'cron.jobs.demo')
 ]
 
+# 配置邮件服务
+# qq邮箱 SMTP 服务器地址
+EMAIL_HOST = 'smtp.qq.com'
+EMAIL_PORT = 465  # 加密通道的端口465，不加密的25
+EMAIL_HOST_USER = MAIL_USERNAME  # 发送邮件的邮箱
+EMAIL_HOST_PASSWORD = MAIL_PASSWORD  # 邮箱的授权码
+EMAIL_USE_TLS = True  # 开启TLS
+EMAIL_FROM = MAIL_USERNAME  # 收件人看到的发件人
