@@ -1,6 +1,6 @@
 certifi
 chardet
-Django == 2.1.2
+Django == 2.2.10
 idna
 Naked
 numpy
